@@ -115,11 +115,11 @@ services:
     restart: always
     ports:
       - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-      - /Docker/mongodb/data:/data/mongodb
-      - /Docker/mongodb/log:/var/log/mongodb
+      - /Docker/mongodb/data:/data/db
+      - /Docker/mongodb/log/mongodb.log:/var/log/mongodb/mongodb.log
     networks:
-      - backend
-    command: mongod --dbpath=/data/mongodb --logpath=/var/log/mongodb --auth
-
-    
+      - backend    
