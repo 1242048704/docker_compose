@@ -120,6 +120,6 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
       - /Docker/mongodb/data:/data/db
-      - /Docker/mongodb/log/mongodb.log:/var/log/mongodb/mongodb.log
+      - /Docker/mongodb/log:/var/log/mongodb
     networks:
       - backend    
