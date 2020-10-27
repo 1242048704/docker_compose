@@ -120,6 +120,6 @@ services:
       - /Docker/mongodb/log:/var/log/mongodb
     networks:
       - backend
-    command: mongo --dbpath=/data/mongodb --logpath=/var/log/mongodb --auth
+    command: mongod --dbpath=/data/mongodb --logpath=/var/log/mongodb --auth
 
     
