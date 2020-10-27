@@ -1,0 +1,125 @@
+version: '3'
+
+networks: 
+
+  backend:
+    driver: bridge
+
+services:
+
+  nginx: 
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports: 
+      - 80:80
+      - 443:443
+    volumes: 
+      - /Docker/www:/www
+      - /Docker/conf:/etc/nginx/conf.d
+      - /Docker/log:/var/log/nginx
+
+  php-fpm: 
+    image: php:7.4-fpm
+    container_name: php
+    restart: always
+    ports: 
+      - 9000:9000
+    volumes: 
+      - /Docker/www:/www
+    networks:
+      - backend
+  
+  swoole:
+    image: phpswoole/swoole
+    container_name: swoole
+    restart: always
+    ports:
+      - 9501:9501
+    volumes:
+      - /Docker/www:/www
+    networks:
+      - backend
+
+  mysql-mater: 
+    image: mysql:5.7.31
+    container_name: my1
+    ports: 
+      - "33061:3306"
+    restart: always
+    environment: 
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    volumes: 
+      - /Docker/mysql/data:/var/lib/mysql
+      - /Docker/log:/var/log/mysql
+    networks:
+      - backend 
+    command: [
+      "--server-id=1",
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci",
+      "--innodb_flush_log_at_trx_commit=1",
+      "--explicit_defaults_for_timestamp=true",
+      "--sync_binlog=1",
+      "--user=root",
+      "--innodb-use-native-aio=0",
+      "--log-bin=mysql-bin",
+    ]  
+
+  mysql-slave: 
+    image: mysql:5.7.31
+    container_name: my2
+    ports: 
+      - "33062:3306"
+    depends_on: 
+      - mysql-mater
+    restart: always
+    environment: 
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    # volumes:
+    #   - ./mysql/slave/data:/var/lib/mysql
+    #   - ./mysql/slave/log:/var/log/mysql
+    networks:
+      - backend 
+    command: [
+      "--server-id=2",
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci",
+      "--explicit_defaults_for_timestamp=true",
+      "--innodb-use-native-aio=0",
+      "--log-bin=mysql-slave-bin",
+      "--relay-log=mysql-slave-log",
+      "--relay-log-index=mysql-slave-log-index",
+    ]
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports: 
+      - 63791:6379
+    volumes:
+      - /Docker/log:/var/log/redis
+      - /Docker/redis/data:/data
+    networks:
+      - backend 
+    command: redis-server --requirepass root --appendonly yes
+    
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - /Docker/mongodb/data:/data/mongodb
+      - /Docker/mongodb/log:/var/log/mongodb
+    networks:
+      - backend
+    command: mongo --dbpath=/data/mongodb --logpath=/var/log/mongodb --auth
+
+    
