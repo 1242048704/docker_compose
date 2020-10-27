@@ -16,8 +16,8 @@ services:
       - 443:443
     volumes: 
       - /Docker/www:/www
-      - /Docker/conf:/etc/nginx/conf.d
-      - /Docker/log:/var/log/nginx
+      - /Docker/nginx/conf.d:/etc/nginx/conf.d
+      - /Docker/nginx/log:/var/log/nginx
 
   php-fpm: 
     image: php:7.4-fpm
@@ -53,7 +53,7 @@ services:
       TZ: Asia/Shanghai
     volumes: 
       - /Docker/mysql/data:/var/lib/mysql
-      - /Docker/log:/var/log/mysql
+      - /Docker/mysql/log:/var/log/mysql
     networks:
       - backend 
     command: [
@@ -103,7 +103,7 @@ services:
     ports: 
       - 63791:6379
     volumes:
-      - /Docker/log:/var/log/redis
+      - /Docker/redis/log:/var/log/redis
       - /Docker/redis/data:/data
     networks:
       - backend 
