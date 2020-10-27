@@ -10,6 +10,7 @@ services:
   nginx: 
     image: nginx:latest
     container_name: nginx
+    privileged: true
     restart: always
     ports: 
       - 80:80
@@ -22,6 +23,7 @@ services:
   php-fpm: 
     image: php:7.4-fpm
     container_name: php
+    privileged: true
     restart: always
     ports: 
       - 9000:9000
@@ -44,6 +46,7 @@ services:
   mysql-mater: 
     image: mysql:5.7.31
     container_name: my1
+    privileged: true
     ports: 
       - "33061:3306"
     restart: always
@@ -71,6 +74,7 @@ services:
   mysql-slave: 
     image: mysql:5.7.31
     container_name: my2
+    privileged: true
     ports: 
       - "33062:3306"
     depends_on: 
@@ -100,6 +104,7 @@ services:
     image: redis
     container_name: redis
     restart: always
+    privileged: true
     ports: 
       - 63791:6379
     volumes:
@@ -113,13 +118,16 @@ services:
     image: mongo
     container_name: mongo
     restart: always
+    privileged: true
     ports:
       - 27017:27017
     environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /data/logs
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-      - /Docker/mongodb/data:/data/db
-      - /Docker/mongodb/log:/var/log/mongodb
+    #   - /Docker/mongodb/data:/data/db
+      - /Docker/mongodb/log:/data/log
     networks:
-      - backend    
+      - backend
