@@ -16,7 +16,7 @@ services:
       - 443:443
     volumes: 
       - /Docker/www:/www
-      - /Docker/nginx/conf.d:/etc/nginx/conf.d
+      - /Docker/nginx/conf:/etc/nginx/conf.d
       - /Docker/nginx/log:/var/log/nginx
 
   php-fpm: 
