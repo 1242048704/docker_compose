@@ -44,8 +44,8 @@ services:
       - backend
 
   mysql-mater: 
-    image: mysql:5.7.31
-    container_name: my1
+    image: mysql:5.7.*
+    container_name: mysql1
     privileged: true
     ports: 
       - "33061:3306"
@@ -72,8 +72,8 @@ services:
     ]  
 
   mysql-slave: 
-    image: mysql:5.7.31
-    container_name: my2
+    image: mysql:5.7.*
+    container_name: mysql2
     privileged: true
     ports: 
       - "33062:3306"
