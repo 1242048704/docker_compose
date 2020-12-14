@@ -122,12 +122,12 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_DATA_DIR: /data/db
-      MONGO_LOG_DIR: /data/logs
+      MONGO_DATA_DIR: /var/log/mongodb
+      MONGO_LOG_DIR: /var/lib/mongodb
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-    #   - /Docker/mongodb/data:/data/db
-      - /Docker/mongodb/log:/data/log
+      - /Docker/mongodb/data:/var/lib/mongodb
+      - /Docker/mongodb/log:/var/log/mongodb
     networks:
       - backend
