@@ -61,8 +61,6 @@ services:
       - backend 
     command: [
       "--server-id=1",
-      "--character-set-server=utf8mb4",
-      "--collation-server=utf8mb4_unicode_ci",
       "--innodb_flush_log_at_trx_commit=1",
       "--explicit_defaults_for_timestamp=true",
       "--sync_binlog=1",
@@ -91,8 +89,6 @@ services:
       - backend 
     command: [
       "--server-id=2",
-      "--character-set-server=utf8mb4",
-      "--collation-server=utf8mb4_unicode_ci",
       "--explicit_defaults_for_timestamp=true",
       "--innodb-use-native-aio=0",
       "--log-bin=mysql-slave-bin",
