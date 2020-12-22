@@ -21,27 +21,31 @@ services:
       - /Docker/nginx/log:/var/log/nginx
 
   php-fpm: 
-    image: php:7.4-fpm
+    image: php:8.0-fpm
     container_name: php
     privileged: true
     restart: always
     ports: 
       - 9000:9000
+      - 9001:9001
+      - 9002:9002
+      - 9003:9003
+      - 9004:9004
     volumes: 
       - /Docker/www:/www
     networks:
       - backend
   
-  swoole:
-    image: phpswoole/swoole
-    container_name: swoole
-    restart: always
-    ports:
-      - 9501:9501
-    volumes:
-      - /Docker/www:/www
-    networks:
-      - backend
+  # swoole:
+  #   image: phpswoole/swoole
+  #   container_name: swoole
+  #   restart: always
+  #   ports:
+  #     - 9501:9501
+  #   volumes:
+  #     - /Docker/www:/www
+  #   networks:
+  #     - backend
 
   mysql-mater: 
     image: mysql:5.7.31
@@ -127,3 +131,14 @@ services:
       - /Docker/mongodb/log:/var/log/mongodb
     networks:
       - backend
+  
+  # super:
+  #   image: ochinchina/supervisord
+  #   container_name: super
+  #   restart: always
+  #   privileged: true
+  #   ports:
+  #     - 8848:8848
+  #   networks:
+  #     - backend
+
