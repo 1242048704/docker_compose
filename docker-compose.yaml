@@ -22,7 +22,7 @@ services:
 
   php-fpm: 
     image: php:8.0-fpm
-    container_name: php
+    container_name: php8
     privileged: true
     restart: always
     ports: 
@@ -35,17 +35,22 @@ services:
       - /Docker/www:/www
     networks:
       - backend
-  
-  # swoole:
-  #   image: phpswoole/swoole
-  #   container_name: swoole
-  #   restart: always
-  #   ports:
-  #     - 9501:9501
-  #   volumes:
-  #     - /Docker/www:/www
-  #   networks:
-  #     - backend
+
+  php-fpm: 
+    image: php:7.4-fpm
+    container_name: php
+    privileged: true
+    restart: always
+    ports: 
+      - 9005:9005
+      - 9006:9006
+      - 9007:9007
+      - 9008:9008
+      - 9009:9009
+    volumes: 
+      - /Docker/www:/www
+    networks:
+      - backend
 
   mysql-mater: 
     image: mysql:5.7.31
@@ -73,32 +78,32 @@ services:
       "--log-bin=mysql-bin",
     ]  
 
-  mysql-slave: 
-    image: mysql:5.7.31
-    container_name: mysql2
-    privileged: true
-    ports: 
-      - "33062:3306"
-    depends_on: 
-      - mysql-mater
-    restart: always
-    environment: 
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: root
-      TZ: Asia/Shanghai
-    # volumes:
-    #   - ./mysql/slave/data:/var/lib/mysql
-    #   - ./mysql/slave/log:/var/log/mysql
-    networks:
-      - backend 
-    command: [
-      "--server-id=2",
-      "--explicit_defaults_for_timestamp=true",
-      "--innodb-use-native-aio=0",
-      "--log-bin=mysql-slave-bin",
-      "--relay-log=mysql-slave-log",
-      "--relay-log-index=mysql-slave-log-index",
-    ]
+  # mysql-slave: 
+  #   image: mysql:5.7.31
+  #   container_name: mysql2
+  #   privileged: true
+  #   ports: 
+  #     - "33062:3306"
+  #   depends_on: 
+  #     - mysql-mater
+  #   restart: always
+  #   environment: 
+  #     MYSQL_USER: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #     TZ: Asia/Shanghai
+  #   # volumes:
+  #   #   - ./mysql/slave/data:/var/lib/mysql
+  #   #   - ./mysql/slave/log:/var/log/mysql
+  #   networks:
+  #     - backend 
+  #   command: [
+  #     "--server-id=2",
+  #     "--explicit_defaults_for_timestamp=true",
+  #     "--innodb-use-native-aio=0",
+  #     "--log-bin=mysql-slave-bin",
+  #     "--relay-log=mysql-slave-log",
+  #     "--relay-log-index=mysql-slave-log-index",
+  #   ]
 
   redis:
     image: redis
@@ -131,14 +136,3 @@ services:
       - /Docker/mongodb/log:/var/log/mongodb
     networks:
       - backend
-  
-  # super:
-  #   image: ochinchina/supervisord
-  #   container_name: super
-  #   restart: always
-  #   privileged: true
-  #   ports:
-  #     - 8848:8848
-  #   networks:
-  #     - backend
-
